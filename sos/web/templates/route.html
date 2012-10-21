@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bootstrap 101 Template</title>
+    <!-- Bootstrap -->
+    <link href="{{ MEDIA_URL }}css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ MEDIA_URL }}css/base.css" rel="stylesheet">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript">
+      tra = {};
+      tra.site_root = '{{ SITE_ROOT }}';
+      tra.media_url = '{{ MEDIA_URL }}';
+    </script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/base.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/route.js"></script>
+  </head>
+  <body>
+    <span class="index-attr" page="1" keyword="" lat="" lng=""></span>
+  <div class="container">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+     
+          <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+     
+          <!-- Be sure to leave the brand out there if you want it shown -->
+          <a class="brand" href="#">旅遊精</a>
+        
+          <!-- Everything you want hidden at 940px or less, place within here -->
+          <div class="nav-collapse">
+            <!-- .nav, .navbar-search, .navbar-form, etc -->
+            <ul class="nav">
+              <li><a href="{{ SITE_ROOT }}">首頁</a></li>
+              <li class="dropdown">
+                <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">地區搜尋 <b class="caret"></b></a>
+                <ul class="dropdown-menu county-menu" role="menu" aria-labelledby="drop1">
+                </ul>
+              </li>
+              <li><a href="{{ SITE_ROOT }}lucky/">好手氣</a></li>
+            </ul>
+            <form class="navbar-search pull-right search-form">
+              <input type="text" class="search-query" placeholder="輸入景點搜尋">
+            </form>
+            <ul class="nav pull-right">
+              <li class="active"><a href="{{ SITE_ROOT }}route/">開始規劃</a></li>
+            </ul>
+          </div>
+     
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="pull-right" style="padding-top: 10px;">
+          <select name="place_end">
+            {% for p in place_list %}
+              <option value="{{ p.lat }},{{ p.lng }}"{% if forloop.last %} selected{% endif %}>{{ p.title }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="pull-right" style="padding-top: 5px;"><h4>&nbsp;&nbsp;&nbsp;&nbsp;設定路線終點：</h4></div>
+        <div class="pull-right" style="padding-top: 10px;">
+          <select name="place_start">
+            {% for p in place_list %}
+              <option value="{{ p.lat }},{{ p.lng }}">{{ p.title }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="pull-right" style="padding-top: 5px;"><h4>設定路線起點：</h4></div>
+      </div>
+    </div>
+
+    <div class="row-fluid">
+      <div class="span12">
+        <h3>景點列表</h3>
+      </div>
+    </div>
+
+    {% for p in place_list %}
+      <div class="row-fluid">
+        <div class="span4">
+          <ul class="thumbnails place-ul">
+            <li class="span12">
+              <a href="{{ SITE_ROOT }}place/{{ p.place_id }}/">
+              <div class="thumbnail">
+                <img src="{{ p.images }}" style="height: 200px">
+              </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="span4">
+          <h3><a href="{{ SITE_ROOT }}place/{{ p.place_id }}/">{{ p.title }}</a></h3>
+          <dl>
+            {% if p.address != "None" %}
+              <dt>地址</dt>
+              <dd>{{ p.address }}</dd>
+            {% endif %}
+
+            {% if p.phone != "None" %}
+              <dt>電話</dt>
+              <dd><img src="{{ p.phone }}"></dd>
+            {% endif %}
+
+            {% if p.mrt != None %}
+              <dt>捷運資訊</dt>
+              <dd>{{ p.mrt }}</dd>
+            {% endif %}
+
+            {% if p.holiday != None %}
+              <dt>公休日</dt>
+              <dd>{{ p.holiday }}</dd>
+            {% endif %}
+
+            {% if p.office_hour != None %}
+              <dt>開放時間</dt>
+              <dd>{{ p.office_hour }}</dd>
+            {% endif %}
+
+            {% if p.shop_info != None %}
+              <dt>營業資訊</dt>
+              <dd>{{ p.shop_info }}</dd>
+            {% endif %}
+
+            {% if p.media_report != None %}
+              <dt>媒體情報</dt>
+              <dd>{{ p.media_report }}</dd>
+            {% endif %}
+
+            {% if p.avg_price != None %}
+              <dt>消費價位</dt>
+              <dd>{{ p.avg_price }}</dd>
+            {% endif %}
+
+            {% if p.capacity != None %}
+              <dt>席位</dt>
+              <dd>{{ p.capacity }}</dd>
+            {% endif %}
+
+            {% if p.media_suggest != None %}
+              <dt>媒體推薦</dt>
+              <dd>{{ p.media_suggest }}</dd>
+            {% endif %}
+          </dl>
+        </div>
+        <div class="span2">
+          {% if p.stay_time != "None" %}
+            <div style="margin-top: 80px;">
+              建議停留時間<br>
+              {{ p.stay_time }} 小時
+            </div>
+          {% endif %}
+        </div>
+        <div class="span2">
+          <div style="margin-top: 80px;">
+            <a class="btn delete-place" href="#" place_id="{{ p.place_id }}"><i class="icon-remove"></i>刪除</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+    <hr>
+    <button class="btn btn-large btn-primary pull-right start-route"><i class="icon-white icon-map-marker"></i>開始規劃</button><br>
+    <br><br><br>
+  </div>
+
+  <div class="container">
+    <ul class="thumbnails place-ul"></ul>
+  </div>
+
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="{{ MEDIA_URL }}js/bootstrap.min.js"></script>
+  </body>
+</html>

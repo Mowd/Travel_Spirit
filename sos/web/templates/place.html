@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bootstrap 101 Template</title>
+    <!-- Bootstrap -->
+    <link href="{{ MEDIA_URL }}css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ MEDIA_URL }}css/base.css" rel="stylesheet">
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript">
+      tra = {};
+      tra.site_root = '{{ SITE_ROOT }}';
+      tra.media_url = '{{ MEDIA_URL }}';
+    </script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/base.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/place.js"></script>
+  </head>
+  <body>
+    <span class="index-attr" page="1" keyword="" lat="" lng=""></span>
+    <span class="place-attr" lat="{{ lat }}" lng="{{ lng }}" title="{{ title }}" place_id="{{ place_id }}"></span>
+    <div class="container">
+      <div class="navbar">
+        <div class="navbar-inner">
+          <div class="container">
+       
+            <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+       
+            <!-- Be sure to leave the brand out there if you want it shown -->
+            <a class="brand" href="#">旅遊精</a>
+              
+            <!-- Everything you want hidden at 940px or less, place within here -->
+            <div class="nav-collapse">
+              <!-- .nav, .navbar-search, .navbar-form, etc -->
+              <ul class="nav">
+                <li><a href="{{ SITE_ROOT }}">首頁</a></li>
+                <li class="dropdown">
+                  <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">地區搜尋 <b class="caret"></b></a>
+                  <ul class="dropdown-menu county-menu" role="menu" aria-labelledby="drop1">
+                  </ul>
+                </li>
+                <li><a href="{{ SITE_ROOT }}lucky/">好手氣</a></li>
+                <li class="active"><a href="#">{{ title }}</a></li>
+              </ul>
+              <form class="navbar-search pull-right search-form">
+                <input type="text" class="search-query" placeholder="輸入景點搜尋">
+              </form>
+              <ul class="nav pull-right">
+                <li><a href="{{ SITE_ROOT }}route/">開始規劃</a></li>
+              </ul>
+            </div>
+       
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row-fluid">
+        <div class="span12"><h3>{{ title }} <button class="btn btn-info pull-right add-place" data-loading-text="加入中..."{% if place_added == "false" %}>加到清單{% else %} disabled="true">已加入{% endif %}</button></h3></div>
+      </div>
+
+      <div class="row-fluid">
+        <div class="span6">
+          <div id="myCarousel" class="carousel slide">
+            <!-- Carousel items -->
+            <div class="carousel-inner">
+              {% for i in images %}
+                <div class="{% if forloop.counter == 1 %}active {% endif %}item">
+                  <img src="{{ i }}">
+                  <div class="carousel-caption">
+                    <p>{{ title }}</p>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <!-- Carousel nav -->
+            <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+            <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+          </div>
+        </div>
+        <div class="span6">
+          <div id="place_map"></div>
+        </div>
+      </div>
+
+      <div class="row-fluid">
+        <div class="span6">
+          <h3>基本資料</h3>
+          <dl class="dl-horizontal">
+            {% if address != "None" %}
+              <dt>地址</dt>
+              <dd>{{ address }}</dd>
+            {% endif %}
+
+            {% if phone != "None" %}
+              <dt>電話</dt>
+              <dd><img src="{{ phone }}"></dd>
+            {% endif %}
+
+            {% if stay_time != "None" %}
+              <dt>建議停留時間</dt>
+              <dd>{{ stay_time }} 小時</dd>
+            {% endif %}
+
+            {% if mrt != None %}
+              <dt>捷運資訊</dt>
+              <dd>{{ mrt }}</dd>
+            {% endif %}
+
+            {% if holiday != None %}
+              <dt>公休日</dt>
+              <dd>{{ holiday }}</dd>
+            {% endif %}
+
+            {% if office_hour != None %}
+              <dt>開放時間</dt>
+              <dd>{{ office_hour }}</dd>
+            {% endif %}
+
+            {% if shop_info != None %}
+              <dt>營業資訊</dt>
+              <dd>{{ shop_info }}</dd>
+            {% endif %}
+
+            {% if media_report != None %}
+              <dt>媒體情報</dt>
+              <dd>{{ media_report }}</dd>
+            {% endif %}
+
+            {% if avg_price != None %}
+              <dt>消費價位</dt>
+              <dd>{{ avg_price }}</dd>
+            {% endif %}
+
+            {% if capacity != None %}
+              <dt>席位</dt>
+              <dd>{{ capacity }}</dd>
+            {% endif %}
+
+            {% if media_suggest != None %}
+              <dt>媒體推薦</dt>
+              <dd>{{ media_suggest }}</dd>
+            {% endif %}
+          </dl>
+        </div>
+        <div class="span6">
+          <h3>標籤</h3>
+          {% for t in tag_list %}
+            {{ t }}
+          {% endfor %}
+        </div>
+      </div>
+    
+      {% if snippets != None %}
+        <h3>重點評論</h3>
+        <div class="row-fluid">
+          <div class="span12">
+            <table class="table table-striped">
+              {% for s in snippets %}
+                <tr>
+                  <td>
+                    <blockquote>
+                      <p>{{ s.text|safe }}</p>
+                      <small><cite title="{{ s.url|safe }}"><a href="{{ s.url|safe }}" target="_blank">原始連結</a></cite></small>
+                    </blockquote>
+                  </td>
+                </tr>
+              {% endfor %}
+            </table>
+          </div>
+        </div>
+      {% endif %}
+
+      <h3>附近景點</h3>
+      <ul class="thumbnails place-ul">
+        {% for p in nearbys %}
+          <li class="span4">
+            <a href="{{ SITE_ROOT }}place/{{ p.place_id }}/">
+            <div class="thumbnail">
+              <img src="{{ p.image }}" alt="{{ p.snippet }}" style="height: 200px">
+              <h3>{{ p.title }}</h3>
+            </div>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="container">
+      <ul class="thumbnails place-ul"></ul>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="{{ MEDIA_URL }}js/bootstrap.min.js"></script>
+  </body>
+</html>

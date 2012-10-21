@@ -1,0 +1,11 @@
+#map_canvas {
+    height: 500px;
+}
+
+#place_map {
+    height: 346px;
+}
+
+.navbar .brand {
+    color: green;
+}
